@@ -10,4 +10,15 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    function codeReturn($statusCode, $data = null, $info = '')
+    {
+        if (!isset($statusCode[0]) || !isset($statusCode[1])) {
+            throw new \Exception('Unknow status code!');
+        }
+
+        $result = ['code' => $statusCode[0], 'msg' => $statusCode[1], 'info' => $info, 'data' => $data];
+
+        return $result;
+    }
 }
