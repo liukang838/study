@@ -37,8 +37,6 @@ class RunMethodCommand extends Command
             $method = $method[1];
             $params = empty($params) ? [] : explode(',', $params);
             $class = new \ReflectionClass($class);
-            //命令运行时强制主库
-//            db_force_master();
             $instance = $class->newInstance();
             $ret = $instance->$method(...$params);
             if ($isEcho && $ret) (is_array($ret) || is_object($ret)) ? $this->line(json_encode($ret, JSON_UNESCAPED_UNICODE)) : $this->line($ret);
