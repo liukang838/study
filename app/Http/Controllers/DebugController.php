@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\StatusCode\StatusCode;
+use Content\Start\Study;
 
 class DebugController extends Controller
 {
@@ -14,6 +15,9 @@ class DebugController extends Controller
      */
     public function index()
     {
+        $service=new Study();
+        $result=$service->index();
+
         $ret = \DB::connection('mysql')->table('article')->first();
         return $this->codeReturn(StatusCode::SUCCESS, $ret);
     }
