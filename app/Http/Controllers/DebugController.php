@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Es\EsArticleModel;
 use App\Http\StatusCode\StatusCode;
-use App\Models\ArticleModel;
+use Illuminate\Http\Request;
 
 class DebugController extends Controller
 {
@@ -13,9 +14,12 @@ class DebugController extends Controller
      * @return array
      * @throws \Exception
      */
-    public function index()
+    public function index(Request $request)
     {
-        $ret = ArticleModel::getInstance()->findBy(2);
+        $id = $request->input('id');
+        if (empty($id)) return $this->codeReturn(StatusCode::FAIL, null, '参数不正确');
+        $ret = EsArticleModel::getInstance()->findBy($id);
+
         return $this->codeReturn(StatusCode::SUCCESS, $ret);
     }
 }

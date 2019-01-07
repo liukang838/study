@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Laravel\Scout\Searchable;
 
 /**
  * Created by PhpStorm.
@@ -14,37 +13,23 @@ use Laravel\Scout\Searchable;
 class ArticleModel extends BaseModel
 {
     use SoftDeletes;
-    use Searchable;
 
     protected $connection = 'mysql';
+
     protected $table = 'article';
 
+    protected $fillable=['content','sort','money','title','created_at','updated_at'];
 
-    public function findBy($id){
+    public $timestamps = true;
+
+    public function findBy($id)
+    {
         return $this->find($id);
     }
 
-    /**
-     * 获取模型的索引名称.
-     *
-     * @return string
-     */
-    public function searchableAs()
+    public function add(array $data)
     {
-        return 'study';
+        return $this->create($data);
     }
 
-    /**
-     * 得到该模型可索引数据的数组。
-     *
-     * @return array
-     */
-    public function toSearchableArray()
-    {
-        $array = $this->toArray();
-
-        // 自定义数组数据...
-
-        return $array;
-    }
 }

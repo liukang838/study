@@ -16,8 +16,6 @@ require __DIR__.'/../app/Helpers/functions.php'; // 引入自定义函数库
 |
 */
 
-require __DIR__.'/../vendor/autoload.php';
-
 /*
 |--------------------------------------------------------------------------
 | Include The Compiled Class File
