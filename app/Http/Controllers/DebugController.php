@@ -16,9 +16,16 @@ class DebugController extends Controller
      */
     public function index(Request $request)
     {
-        $id = $request->input('id');
-        if (empty($id)) return $this->codeReturn(StatusCode::FAIL, null, '参数不正确');
-        $ret = EsArticleModel::getInstance()->findBy($id);
+        $ret = ['1123123'];
+
+//        $key = $request->input('key');
+//        if (empty($key)) return $this->codeReturn(StatusCode::FAIL, null, '参数不正确');
+//
+//        $title = $request->input('title');
+//        if (empty($key)) return $this->codeReturn(StatusCode::FAIL, null, '参数不正确');
+//
+//        $params = ['content' => $key, 'title' => $title];
+//        $ret = EsArticleModel::getInstance()->search($params);
 
         return $this->codeReturn(StatusCode::SUCCESS, $ret);
     }

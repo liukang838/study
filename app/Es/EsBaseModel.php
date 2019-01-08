@@ -62,4 +62,39 @@ class EsBaseModel
         return array_get($ret, '_source');
     }
 
+    /**
+     * 查询(search)
+     *
+     * @param array $matchArr
+     * @desc or多条件查询 ['match'=>['content' => 'keyword1 keyword2']]；and的多条件查询['match'=>['content' => 'keyword1'],'match'=>['title'=>'keyword2']
+     * @return array
+     */
+    public function search(array $matchArr, $page = null, $perPage = null)
+    {
+        $params = [
+            'index' => $this->index,
+            'type' => $this->type,
+            'client' => ['ignore' => [400, 404]],
+            'body' => [
+                'query' => $matchArr
+            ]
+        ];
+
+        if (!is_null($page) && !is_null($perPage)) {
+            $params = array_push($params, ['from' => $page * $perPage, 'size' => $perPage]);
+        }
+
+        $ret = $this->client->search($params);
+
+        $total = array_get($ret['hits'], 'total', 0);
+        if ($total == 0) return [];
+
+        return array_pluck(array_get($ret['hits'], 'hits', []), '_source');
+    }
+
+    public function searchWithSlice()
+    {
+        return
+    }
+
 }
