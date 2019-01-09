@@ -11,6 +11,27 @@ $dsn = 'mysql:dbname=test;host=127.0.0.1';
 $username = 'liukang_rw';
 $pwd = 'kang1314';
 
+$s = microtime(true);
+
+for ($c = 100; $c--;) {
+    go(function () {
+        $mysql = new Swoole\Coroutine\MySQL;
+        $mysql->connect([
+            'host' => '127.0.0.1',
+            'user' => 'liukang_rw',
+            'password' => 'kang1314',
+            'database' => 'test'
+        ]);
+        $statement = $mysql->prepare('SELECT * FROM `article`');
+        for ($n = 100; $n--;) {
+            $result = $statement->execute();
+            assert(count($result) > 0);
+        }
+    });
+}
+Swoole\Event::wait();
+echo 'use ' . (microtime(true) - $s) . ' s';
+
 try {
     $attr = [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
