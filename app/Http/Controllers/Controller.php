@@ -11,7 +11,9 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    function codeReturn($statusCode, $data = null, $info = '')
+    protected $guard;
+
+    public function codeReturn($statusCode, $data = null, $info = '')
     {
         if (!isset($statusCode[0]) || !isset($statusCode[1])) {
             throw new \Exception('Unknow status code!');
@@ -20,5 +22,13 @@ class Controller extends BaseController
         $result = ['code' => $statusCode[0], 'msg' => $statusCode[1], 'info' => $info, 'data' => $data];
 
         return $result;
+    }
+
+    public function user()
+    {
+        if (empty($this->guard)) {
+            return null;
+        }
+        return \Auth::guard($this->guard)->user();
     }
 }

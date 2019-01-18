@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\StatusCode\StatusCode;
 use App\Models\ArticleModel;
+use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Swoole\Coroutine\MySQL;
 use PDO;
@@ -18,10 +19,12 @@ class DebugController extends Controller
      */
     public function index(Request $request)
     {
-        $result = ['1123123'];
+        $c=['iss' => 1, 'iat' => 1, 'exp' => 100, 'nbf' => 111, 'sub' => 1, 'jti' => 1];
+
+        $str = UserModel::getInstance()->getToken($c);
+        return $this->codeReturn(StatusCode::SUCCESS, $str);
 
         $result = ArticleModel::get();
-
 
         try {
 
@@ -63,4 +66,5 @@ class DebugController extends Controller
 
         return $this->codeReturn(StatusCode::SUCCESS, $result);
     }
+
 }
