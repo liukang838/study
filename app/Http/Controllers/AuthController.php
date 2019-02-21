@@ -42,7 +42,7 @@ class AuthController extends Controller
         $is = \Hash::check($password, $user->password);
         if (!$is) return $this->codeReturn(StatusCode::NO_PERMISSIONS);
 
-        $token = \Auth::guard('api')->login($user);
+        $token = \Auth::guard($this->guard)->login($user);
 
         if (!$token) return $this->codeReturn(StatusCode::NO_PERMISSIONS);
         $user->token = $token;
@@ -52,39 +52,31 @@ class AuthController extends Controller
     /**
      * Log the user out (Invalidate the token).
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return array
+     * @throws \Exception
      */
     public function logout()
     {
-        auth('api')->logout();
+        \Auth::guard($this->guard)->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return $this->codeReturn(StatusCode::SUCCESS);
+    }
+
+    public function getUser()
+    {
+        return $this->codeReturn(StatusCode::SUCCESS, $this->user());
     }
 
     /**
      * Refresh a token.
-     * 刷新token，如果开启黑名单，以前的token便会失效。
-     * 值得注意的是用上面的getToken再获取一次Token并不算做刷新，两次获得的Token是并行的，即两个都可用。
-     * @return \Illuminate\Http\JsonResponse
+     *
+     * @return array
+     * @throws \Exception
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth('api')->refresh());
-    }
+        $token = \Auth::guard($this->guard)->refresh();
 
-    /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function respondWithToken($token)
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 60
-        ]);
+        return $this->codeReturn(StatusCode::SUCCESS, $token);
     }
 }

@@ -19,7 +19,7 @@ class DebugController extends Controller
      */
     public function index(Request $request)
     {
-        $c=['iss' => 1, 'iat' => 1, 'exp' => 100, 'nbf' => 111, 'sub' => 1, 'jti' => 1];
+        $c = ['iss' => 1, 'iat' => 1, 'exp' => 100, 'nbf' => 111, 'sub' => 1, 'jti' => 1];
 
         $str = UserModel::getInstance()->getToken($c);
         return $this->codeReturn(StatusCode::SUCCESS, $str);
@@ -65,6 +65,47 @@ class DebugController extends Controller
 //        $ret = EsArticleModel::getInstance()->search($params);
 
         return $this->codeReturn(StatusCode::SUCCESS, $result);
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    public function sort()
+    {
+        $arr = [3, 8, 6, 1, 9, 11, 2, 7, 4, 2, 32, 88, 56, 25, 46, 47, 99, 44, 2523, 2, 456, 2312];
+
+
+
+        $count = count($arr);
+        //冒泡排序 每外层循环一次就将最大的数放在最后
+//        for ($i = 1; $i < $count; $i++) {
+//            for ($j = 0; $j < $count - $i; $j++) {
+//                if ($arr[$j] > $arr[$j + 1]) {
+//                    $tmp = $arr[$j + 1];
+//                    $arr[$j + 1] = $arr[$j];
+//                    $arr[$j] = $tmp;
+//                }
+//            }
+//        }
+
+        //选择排序
+        for ($i = 0; $i < $count - 1; $i++) {
+            $min = $arr[$i];
+            $minIndex = $i;
+            for ($j = $i + 1; $j < $count; $j++) {
+                if ($min > $arr[$j]) {
+                    $min = $arr[$j];
+                    $minIndex = $j;
+                }
+            }
+            $tmp = $arr[$i];
+            $arr[$i] = $arr[$minIndex];
+            $arr[$minIndex] = $tmp;
+        }
+
+        return $this->codeReturn(StatusCode::SUCCESS, $arr);
+
     }
 
 }
