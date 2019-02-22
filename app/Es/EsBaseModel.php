@@ -38,7 +38,17 @@ class EsBaseModel
 
     private function setClient()
     {
-        $this->client = $client = ClientBuilder::create()->build();
+        $hosts = [
+            [
+                'host' => '47.104.64.164',
+                'port' => '9200',
+                'scheme' => 'http',
+                'user' => '',
+                'pass' => ''
+            ]
+        ];
+
+        $this->client = $client = ClientBuilder::create()->setHosts($hosts)->build();
     }
 
     /**
@@ -92,9 +102,5 @@ class EsBaseModel
         return array_pluck(array_get($ret['hits'], 'hits', []), '_source');
     }
 
-    public function searchWithSlice()
-    {
-        return
-    }
 
 }

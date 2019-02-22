@@ -7,6 +7,8 @@
 
 require('./bootstrap');
 
+import 'element-ui/lib/theme-chalk/index.css'
+import 'element-ui/lib/index.js'
 window.Vue = require('vue');
 
 /**

@@ -11,9 +11,8 @@
 |
 */
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
-
+Route::get('/', function () {
+    return view('element');
+});
 
 Route::any('index', 'DebugController@index');
