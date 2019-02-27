@@ -16,3 +16,4 @@ Route::get('/', function () {
 });
 
 Route::any('index', 'DebugController@index');
+Route::any('sort', 'DebugController@sort');

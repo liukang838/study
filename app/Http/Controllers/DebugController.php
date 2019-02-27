@@ -77,4 +77,106 @@ class DebugController extends Controller
         return $this->codeReturn(StatusCode::SUCCESS, $ret);
     }
 
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    public function sort()
+    {
+        $arr = [];
+        for ($i = 1; $i <= 1000000; $i++) {
+            $arr[] = mt_rand(1, 100000000000);
+        }
+        sort($arr);
+        $count = count($arr);
+
+        $ret = $this->quicklySearch($arr, 12312231233, 0, $count - 1);
+
+        return $this->codeReturn(StatusCode::SUCCESS, $ret);
+
+
+        //冒泡排序 每外层循环一次就将最大的数放在最后
+//        for ($i = 1; $i < $count; $i++) {
+//            for ($j = 0; $j < $count - $i; $j++) {
+//                if ($arr[$j] > $arr[$j + 1]) {
+//                    $tmp = $arr[$j + 1];
+//                    $arr[$j + 1] = $arr[$j];
+//                    $arr[$j] = $tmp;
+//                }
+//            }
+//        }
+
+//        //选择排序
+//        for ($i = 0; $i < $count - 1; $i++) {
+//            $min = $arr[$i];
+//            $minIndex = $i;
+//            for ($j = $i + 1; $j < $count; $j++) {
+//                if ($min > $arr[$j]) {
+//                    $min = $arr[$j];
+//                    $minIndex = $j;
+//                }
+//            }
+//            $tmp = $arr[$i];
+//            $arr[$i] = $arr[$minIndex];
+//            $arr[$minIndex] = $tmp;
+//        }
+
+        //插入排序
+//        for ($i = 1; $i < $count; $i++) {
+//            $insert = $arr[$i];
+//            $j = $i - 1;
+//            //寻找插入的位置
+//            for (; $j >= 0; $j--) {
+//                if ($arr[$j] > $insert){
+//                    $arr[$j + 1] = $arr[$j];
+//                }else{
+//                    break;
+//                }
+//            }
+//            $arr[$j + 1] = $insert;
+//        }
+
+        //快速排序
+//        $arr = $this->quicklySort($arr);
+
+        return $this->codeReturn(StatusCode::SUCCESS, $arr);
+
+    }
+
+    public function quicklySearch(array $arr, $num, $start, $end)
+    {
+        if ($start > $end) return false;
+
+        $mid = floor(($start + $end) / 2);
+        if ($arr[$mid] == $num) {
+            return $mid;
+        } else if ($arr[$mid] > $num) {
+            return $this->quicklySearch($arr, $num, $start, $mid - 1);
+        } else {
+            return $this->quicklySearch($arr, $num, $mid + 1, $end);
+        }
+
+    }
+
+    public function quicklySort($array)
+    {
+        if (!isset($array[1])) return $array;
+
+        $mid = $array[0];
+        $left = $right = [];
+        foreach ($array as $value) {
+            if ($mid > $value) {
+                $left[] = $value;
+            }
+            if ($mid < $value) {
+                $right[] = $value;
+            }
+        }
+        $leftArr = $this->quicklySort($left);
+        $leftArr[] = $mid;
+        $rightArr = $this->quicklySort($right);
+        return array_merge($leftArr, $rightArr);
+
+    }
+
 }
