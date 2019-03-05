@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Es\EsArticleModel;
 use App\Http\StatusCode\StatusCode;
 use App\Models\ArticleModel;
+use App\Models\Kafka;
+use App\Models\KafkaModel;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Swoole\Coroutine\MySQL;
@@ -81,8 +83,9 @@ class DebugController extends Controller
      * @return array
      * @throws \Exception
      */
-    public function sort()
+    public function sort(Request $request)
     {
+        dd($this->test($request->input('c')));
         $arr = [];
         for ($i = 1; $i <= 1000000; $i++) {
             $arr[] = mt_rand(1, 100000000000);
@@ -145,6 +148,8 @@ class DebugController extends Controller
 
     public function quicklySearch(array $arr, $num, $start, $end)
     {
+
+
         if ($start > $end) return false;
 
         $mid = floor(($start + $end) / 2);
@@ -177,6 +182,23 @@ class DebugController extends Controller
         $rightArr = $this->quicklySort($right);
         return array_merge($leftArr, $rightArr);
 
+    }
+
+    public function test($c)
+    {
+        return call_user_func(function ($a, $p) use ($c) {
+            return [
+                'a' => $a,
+                'b' => $p,
+                'c' => $c
+            ];
+        }, $c);
+    }
+
+    public function production()
+    {
+        $ret = KafkaModel::getInstance()->sendMessage(['fuck you mom!']);
+        return $this->codeReturn(StatusCode::SUCCESS, $ret);
     }
 
 }
