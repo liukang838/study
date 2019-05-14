@@ -13,7 +13,6 @@
         "laravel/tinker": "^1.0",
         "nmred/kafka-php": "dev-master",
         "predis/predis": "^1.1",
-        "swooletw/laravel-swoole": "^2.5",
         "tymon/jwt-auth": "1.0.0-rc.3"
     },
     "require-dev": {

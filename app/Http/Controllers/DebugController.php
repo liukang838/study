@@ -22,6 +22,33 @@ class DebugController extends Controller
      */
     public function index(Request $request)
     {
+        $ret = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
+        $ret = array_merge($ret, []);
+        shuffle($ret);
+
+        $count = count($ret);
+        for ($i = 0; $i < $count; $i++) {
+            $mod = bcmod($i, 4);
+            switch ($mod) {
+                case 0:
+                    $data['A'][] = $ret[$i];
+                    break;
+                case 1:
+                    $data['B'][] = $ret[$i];
+                    break;
+                case 2:
+                    $data['C'][] = $ret[$i];
+                    break;
+                case 3:
+                    $data['D'][] = $ret[$i];
+                    break;
+                default:
+                    break;
+            }
+        }
+        dd($data);
+
+
         //邮箱的正则
         $str = '971909657i@qq.com';
         $pattern = '/[\w]+@.[\w]+\.[\w]+/';
@@ -85,7 +112,6 @@ class DebugController extends Controller
      */
     public function sort(Request $request)
     {
-        dd($this->test($request->input('c')));
         $arr = [];
         for ($i = 1; $i <= 1000000; $i++) {
             $arr[] = mt_rand(1, 100000000000);
