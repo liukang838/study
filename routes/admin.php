@@ -1,3 +1,3 @@
 <?php
 
-Route::any('index', 'DebugController@index');
+Route::any('home', 'Admin\HomeController@index');

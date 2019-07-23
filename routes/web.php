@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('element');
+
 });
 
 Route::any('index', 'DebugController@index');

@@ -8,6 +8,7 @@ use App\Models\ArticleModel;
 use App\Models\Kafka;
 use App\Models\KafkaModel;
 use App\Models\UserModel;
+use ComposerStudy\Content\Start\Study;
 use Illuminate\Http\Request;
 use Swoole\Coroutine\MySQL;
 use PDO;
@@ -22,42 +23,6 @@ class DebugController extends Controller
      */
     public function index(Request $request)
     {
-        $ret = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
-        $ret = array_merge($ret, []);
-        shuffle($ret);
-
-        $count = count($ret);
-        for ($i = 0; $i < $count; $i++) {
-            $mod = bcmod($i, 4);
-            switch ($mod) {
-                case 0:
-                    $data['A'][] = $ret[$i];
-                    break;
-                case 1:
-                    $data['B'][] = $ret[$i];
-                    break;
-                case 2:
-                    $data['C'][] = $ret[$i];
-                    break;
-                case 3:
-                    $data['D'][] = $ret[$i];
-                    break;
-                default:
-                    break;
-            }
-        }
-        dd($data);
-
-
-        //邮箱的正则
-        $str = '971909657i@qq.com';
-        $pattern = '/[\w]+@.[\w]+\.[\w]+/';
-//        $str = preg_replace($pattern, '\\1', $str);
-        preg_match($pattern, $str, $ret);
-        dd($ret);
-
-        return $this->codeReturn(StatusCode::SUCCESS);
-
 //        $c=['iss' => 1, 'iat' => 1, 'exp' => 100, 'nbf' => 111, 'sub' => 1, 'jti' => 1];
 //
 //        $str = UserModel::getInstance()->getToken($c);
@@ -223,7 +188,7 @@ class DebugController extends Controller
 
     public function production()
     {
-        $ret = KafkaModel::getInstance()->sendMessage(['fuck you mom!']);
+        $ret = KafkaModel::getInstance()->sendMessage(['fuck you mom!!!!!!!!']);
         return $this->codeReturn(StatusCode::SUCCESS, $ret);
     }
 
