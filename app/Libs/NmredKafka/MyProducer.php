@@ -11,15 +11,15 @@ use Kafka\ProducerConfig;
  * Date: 2019/7/23
  * Time: 下午3:48
  */
-class MyProducer
+class MyProducer extends MyKafka
 {
     private $producer;
     private $topic;
     private $message = 'wocao';
 
-    public function __construct($topic = 'test', $message = 'fuck!')
+    public function __construct($topic = 'test', $message = 'fuck your mather!')
     {
-        ProducerConfig::getInstance()->setMetadataBrokerList('localhost:9092');
+        parent::__construct();
         $this->topic = $topic;
         $this->message = $message;
     }

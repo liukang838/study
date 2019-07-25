@@ -12,9 +12,11 @@ use Kafka\ProducerConfig;
  */
 class MyKafka
 {
+    public $config;
 
     public function __construct()
     {
-        ProducerConfig::getInstance()->setMetadataBrokerList('localhost:9092');
+        $this->config = ProducerConfig::getInstance();
+        $this->config->setMetadataBrokerList('localhost:9092');
     }
 }

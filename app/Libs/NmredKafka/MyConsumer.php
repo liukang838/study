@@ -2,7 +2,7 @@
 
 namespace App\Libs\NmredKafka;
 
-use Kafka\Producer;
+use Kafka\Consumer;
 use Kafka\ProducerConfig;
 
 /**
@@ -11,38 +11,29 @@ use Kafka\ProducerConfig;
  * Date: 2019/7/23
  * Time: 下午3:48
  */
-class MyConsumer
+class MyConsumer extends MyKafka
 {
-    private $producer;
+    private $consumer;
     private $topic;
     private $message = 'wocao';
 
     public function __construct($topic = 'test', $message = 'fuck!')
     {
-        ProducerConfig::getInstance()->setMetadataBrokerList('localhost:9092');
+        parent::__construct();
         $this->topic = $topic;
         $this->message = $message;
+
+        $this->config->setGroupId('group1');
+        $this->config->setTopics([$this->topic]);
+        $this->config->setOffsetReset('latest');
     }
 
     public function handle()
     {
-        $this->producer = new Producer(function () {
-            return [
-                [
-                    'topic' => $this->topic,
-                    'value' => $this->message
-                ],
-            ];
-        });
+        $this->consumer = new Consumer();
 
-        $this->producer->success(function ($result) {
-            var_dump($result);
+        return $this->consumer->start(function ($topic, $part, $message) {
+            var_dump($message);
         });
-
-        $this->producer->error(function ($errorCode) {
-            var_dump($errorCode);
-        });
-
-        return $this->producer->send(true);
     }
 }
