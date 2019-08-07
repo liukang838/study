@@ -23,9 +23,9 @@ class UserModel extends Authenticatable implements JWTSubject
 
     protected $table = 'users';
 
-    protected $fillable = ['id', 'name', 'created_at', 'updated_at', 'deleted_at'];
+    protected $fillable = ['id', 'name', 'password', 'created_at', 'updated_at', 'deleted_at'];
 
-    protected $hidden = ['password', 'deleted_at'];
+    protected $hidden = ['deleted_at'];
 
     public $timestamps = true;
 
@@ -44,12 +44,28 @@ class UserModel extends Authenticatable implements JWTSubject
      * 通过账户和密码获取用户信息
      *
      * @param $name
-     * @param $password
+     * @param $columns
      * @return mixed
      */
-    public function getUserByName($name, $password)
+    public function getUserByName($name, $columns = ['*'])
     {
-        return $this->where('username', $name)->first();
+        return $this->where('username', $name)->first($columns);
+    }
+
+    /**
+     * Get user info by phone
+     *
+     * @param $phone
+     * @return mixed
+     */
+    public function getUserByPhone($phone)
+    {
+        return $this->where('phone', $phone)->first();
+    }
+
+    public function getUserByEmail($email)
+    {
+        return $this->where('email', $email)->first();
     }
 
     /**

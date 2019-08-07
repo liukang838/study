@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\StatusCode\StatusCode;
-use App\Models\UserModel;
+use App\Http\StatusCode\UserStatusCode;
+use App\Servers\Auth\Factory\EmailAuthFactory;
+use App\Servers\Auth\Factory\PhoneAuthFactory;
 use Illuminate\Http\Request;
-use JWTAuth;
-use JWTFactory;
 
 class AuthController extends Controller
 {
@@ -30,22 +30,24 @@ class AuthController extends Controller
      * @return array
      * @throws \Exception
      */
-    public function login(Request $request)
+    public function loginByPhone(Request $request)
     {
-        $username = $request->input('username');
+        $phone = $request->input('phone');
         $password = $request->input('password');
-        if (empty($username) || empty($password)) return $this->codeReturn(StatusCode::DATA_VALIDATE_FAIL);
+        if (empty($phone) || empty($password)) return $this->codeReturn(StatusCode::DATA_VALIDATE_FAIL);
 
-        $user = UserModel::getInstance()->getUserByName($username, $password);
-        if (is_null($user)) return $this->codeReturn(StatusCode::NO_PERMISSIONS);
+        $phoneFactory = PhoneAuthFactory::createAuth($phone, $password);
+        if (is_null($phoneFactory->user)) return $this->codeReturn(UserStatusCode::USER_UN_EXISTS);
 
-        $is = \Hash::check($password, $user->password);
-        if (!$is) return $this->codeReturn(StatusCode::NO_PERMISSIONS);
+        $checkPassword = $phoneFactory->check();
+        if (!$checkPassword) return $this->codeReturn(UserStatusCode::PASSWORD_ERROR);
 
+        $user = $phoneFactory->user;
         $token = \Auth::guard($this->guard)->login($user);
-
-        if (!$token) return $this->codeReturn(StatusCode::NO_PERMISSIONS);
+        if (!$token) return $this->codeReturn(UserStatusCode::FAIL);
         $user->token = $token;
+
+        unset($user->password);
         return $this->codeReturn(StatusCode::SUCCESS, $user);
     }
 

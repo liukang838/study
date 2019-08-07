@@ -10,3 +10,8 @@
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::post('login/phone', 'AuthController@loginByPhone');
+Route::post('logout', 'AuthController@logout');
+Route::post('refresh', 'AuthController@refresh');
+Route::get('user', 'AuthController@getUser');
