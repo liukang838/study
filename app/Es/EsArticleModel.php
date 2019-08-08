@@ -18,4 +18,22 @@ class EsArticleModel extends EsBaseModel
     {
         parent::__construct($this->index, $this->type);
     }
+
+    /**
+     * @param $title
+     * @return array|mixed
+     */
+    public function getByTitle($title)
+    {
+        $params = ['query' => [
+            'bool' => [
+                'should' => [
+                    'match' => ['title' => $title]
+                ]
+            ]
+        ]
+        ];
+
+        return $this->search($params);
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Es;
 
+use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
 
 /**
@@ -18,13 +19,24 @@ class EsBaseModel
 
     protected $type;
 
-    private $client;
+    protected $params;
+
+    /**
+     * @var Client
+     */
+    protected $client;
 
     function __construct($index, $type)
     {
         $this->index = $index;
         $this->type = $type;
         $this->setClient();
+
+        $this->params = [
+            'index' => $this->index,
+            'type' => $this->type,
+            'client' => ['ignore' => [400, 404]]
+        ];
     }
 
     public static function getInstance()
@@ -48,7 +60,19 @@ class EsBaseModel
             ]
         ];
 
-        $this->client = $client = ClientBuilder::create()->setHosts($hosts)->build();
+        $client = ClientBuilder::create()->setHosts($hosts)->build();
+        $this->client = $client;
+    }
+
+    /**
+     * 设置参数
+     *
+     * @param $key
+     * @param $value
+     */
+    public function setParams($key, $value)
+    {
+        $this->params[$key] = $value;
     }
 
     /**
@@ -59,48 +83,36 @@ class EsBaseModel
      */
     public function findBy($id)
     {
-        $params = [
-            'index' => $this->index,
-            'type' => $this->type,
-            'id' => $id,
-            'client' => ['ignore' => [400, 404]]
-        ];
-
-        $ret = $this->client->get($params);
+        $this->setParams('id', $id);
+        $ret = $this->client->get($this->params);
         $isSuccess = array_get($ret, 'found', false);
         if (!$isSuccess) return [];
         return array_get($ret, '_source');
     }
 
     /**
-     * 查询(search)
+     * 创建数据
      *
-     * @param array $matchArr
-     * @desc or多条件查询 ['match'=>['content' => 'keyword1 keyword2']]；and的多条件查询['match'=>['content' => 'keyword1'],'match'=>['title'=>'keyword2']
+     * @param array $data
      * @return array
      */
-    public function search(array $matchArr, $page = null, $perPage = null)
+    public function create(array $data)
     {
-        $params = [
-            'index' => $this->index,
-            'type' => $this->type,
-            'client' => ['ignore' => [400, 404]],
-            'body' => [
-                'query' => $matchArr
-            ]
-        ];
+        $params['body'] = $data;
+        $params['index'] = $this->index;
+        $params['type'] = $this->type;
 
-        if (!is_null($page) && !is_null($perPage)) {
-            $params = array_push($params, ['from' => $page * $perPage, 'size' => $perPage]);
-        }
+        return $this->client->index($params);
+    }
 
-        $ret = $this->client->search($params);
-
+    public function search($params)
+    {
+        $this->setParams('body', $params);
+        $ret = $this->client->search($this->params);
+dd($ret);
         $total = array_get($ret['hits'], 'total', 0);
         if ($total == 0) return [];
 
-        return array_pluck(array_get($ret['hits'], 'hits', []), '_source');
+        return array_get($ret['hits'], 'hits', []);
     }
-
-
 }

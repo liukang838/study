@@ -23,6 +23,10 @@ class DebugController extends Controller
      */
     public function index(Request $request)
     {
+
+        return EsArticleModel::getInstance()->getByTitle('');
+
+
 //        $c=['iss' => 1, 'iat' => 1, 'exp' => 100, 'nbf' => 111, 'sub' => 1, 'jti' => 1];
 //
 //        $str = UserModel::getInstance()->getToken($c);

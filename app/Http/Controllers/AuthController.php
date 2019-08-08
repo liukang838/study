@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\StatusCode\StatusCode;
 use App\Http\StatusCode\UserStatusCode;
-use App\Servers\Auth\Factory\EmailAuthFactory;
 use App\Servers\Auth\Factory\PhoneAuthFactory;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    protected $guard = 'api';
+    protected $guard = 'reader';
 
     /**
      * Create a new AuthController instance.
