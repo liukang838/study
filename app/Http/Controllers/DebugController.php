@@ -16,15 +16,21 @@ use PDO;
 class DebugController extends Controller
 {
     /**
-     *  测试用api接口
+     * 测试用api接口
      *
-     * @return array
+     * @param Request $request
+     * @return array|string
      * @throws \Exception
      */
     public function index(Request $request)
     {
+        $payload=\Cache::connection()->set('redislock', 1, 'EX', 5, 'NX');
+        if(is_null($payload)) return 'repeat';
+        return $payload->getPayload();
 
-        return EsArticleModel::getInstance()->getByTitle('');
+
+//        $ret = EsArticleModel::getInstance()->getByTitle('dasdasda');
+//        return $this->codeReturn(StatusCode::SUCCESS, $ret);
 
 
 //        $c=['iss' => 1, 'iat' => 1, 'exp' => 100, 'nbf' => 111, 'sub' => 1, 'jti' => 1];

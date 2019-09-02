@@ -26,11 +26,9 @@ class EsArticleModel extends EsBaseModel
     public function getByTitle($title)
     {
         $params = ['query' => [
-            'bool' => [
-                'should' => [
-                    'match' => ['title' => $title]
-                ]
-            ]
+            'constant_score'=>['filter' => ['term' => [
+                'title' => $title
+            ]]]
         ]
         ];
 

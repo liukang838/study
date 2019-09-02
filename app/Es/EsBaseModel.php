@@ -109,7 +109,7 @@ class EsBaseModel
     {
         $this->setParams('body', $params);
         $ret = $this->client->search($this->params);
-dd($ret);
+
         $total = array_get($ret['hits'], 'total', 0);
         if ($total == 0) return [];
 

@@ -575,6 +575,8 @@ if (!function_exists('getRedisLock')) {
     function getRedisLock($key, $timeoutMin = 10)
     {
         $payload = \Cache::connection()->set(\Cache::getPrefix() . $key, 1, "EX", $timeoutMin * 60, "NX");
+
+        //可以通过这个方法获取创建数据返回结果 $payload->getPayload();
         if (is_null($payload)) {
             Log::info('redisLock key => ' . $key . ' pid => ' . getmypid());
             return false;
