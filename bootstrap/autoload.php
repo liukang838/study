@@ -1,9 +1,6 @@
 <?php
-
-define('LARAVEL_START', microtime(true));
-
-require __DIR__.'/../vendor/autoload.php';
-require __DIR__.'/../app/Helpers/functions.php'; // 引入自定义函数库
+require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../app/Helpers/functions.php'; // 引入自定义函数库
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +25,7 @@ require __DIR__.'/../app/Helpers/functions.php'; // 引入自定义函数库
 |
 */
 
-$compiledPath = __DIR__.'/cache/compiled.php';
+$compiledPath = __DIR__ . '/cache/compiled.php';
 
 if (file_exists($compiledPath)) {
     require $compiledPath;

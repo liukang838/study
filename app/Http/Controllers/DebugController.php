@@ -24,14 +24,10 @@ class DebugController extends Controller
      */
     public function index(Request $request)
     {
-        $payload=\Cache::connection()->set('redislock', 1, 'EX', 5, 'NX');
-        if(is_null($payload)) return 'repeat';
-        return $payload->getPayload();
+//        $ret = EsArticleModel::getInstance()->create(['title' => 'my cat is lovely!', 'content' => 'cat dog pig and you!']);
 
-
-//        $ret = EsArticleModel::getInstance()->getByTitle('dasdasda');
-//        return $this->codeReturn(StatusCode::SUCCESS, $ret);
-
+        $ret = EsArticleModel::getInstance()->findByCon('北京', '电视剧');
+        return $this->codeReturn(StatusCode::SUCCESS, $ret);
 
 //        $c=['iss' => 1, 'iat' => 1, 'exp' => 100, 'nbf' => 111, 'sub' => 1, 'jti' => 1];
 //
